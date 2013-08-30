@@ -1,0 +1,123 @@
+function formCheck(formobj){
+	// Enter name of mandatory fields
+	var fieldRequired = Array("user_name", "user_pwd", "user_pwd_conf","user_tname","user_institute","user_address","user_email", "passcode");
+	// Enter field description to appear in the dialog box
+	var fieldDescription = Array("User ID", "Password", "Re-enter Password","Your Name","Institute","Address","Valid Email Address","Verify Code");
+	// dialog message
+	var alertMsg = "Please input:\n\n";
+	var l_Msg = alertMsg.length;
+	for (var i = 0; i < fieldRequired.length; i++){
+		var ele = document.getElementById(fieldRequired[i]);
+		if(!ele) continue;
+		var obj = formobj.elements[fieldRequired[i]];
+		if (obj){
+			switch(obj.type){
+			case "select-one":
+				if (obj.value == "0"){
+					alertMsg += " - " + fieldDescription[i] + "\n";
+				}
+				break;
+			case "select-multiple":
+				if (obj.selectedIndex == -1){
+					alertMsg += " - " + fieldDescription[i] + "\n";
+				}
+				break;
+			case "text":
+			case "textarea":
+				if (obj.value == "" || obj.value == null){
+					alertMsg += " - " + fieldDescription[i] + "\n";
+				}
+				break;
+			case "password":
+				if (obj.value == "" || obj.value == null){
+					alertMsg += " - " + fieldDescription[i] + "\n";
+				}
+				break;
+			default:
+			}
+			if (obj.type == undefined){
+				var blnchecked = false;
+				for (var j = 0; j < obj.length; j++){
+					if (obj[j].checked){
+						blnchecked = true;
+					}
+				}
+				if (!blnchecked){
+					alertMsg += " - " + fieldDescription[i] + "\n";
+				}
+			}
+		}
+		if (obj.name == "user_email"){
+			var reg_name = /^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$/;
+			if(!reg_name.test(obj.value))
+			alertMsg += " - invalid email address!\n";
+		}
+	}
+
+	if (alertMsg.length == l_Msg){
+		return true;
+	}else{
+		alert(alertMsg);
+		return false;
+	}
+}
+
+checked=false;
+function checkedAll (columncheck) {
+	var aa = document.getElementById('columncheck');
+	var tr = new Array();
+	checked = !checked;
+	for (var i = 0; i < aa.elements.length; i++) {
+		if (!aa.elements[i].className.match(/\borgan\b/)) { // skip this col
+			aa.elements[i].checked = checked;
+			tr[i] = aa.elements[i].parentNode.parentNode;
+			if (checked) {
+				tr[i].className += ' checked';
+			} else {
+				tr[i].className = tr[i].className.replace(/\ *checked/ig, "");
+			}
+		}
+	}
+}
+
+function change(obj) {
+	var tr = obj.parentNode.parentNode;
+	if(obj.checked) {
+		tr.className += ' checked';
+	} else {
+		tr.className = tr.className.replace(/\ *checked/ig, "");
+    }
+}
+
+function main_table(obj){
+	var tr=document.getElementById(obj).getElementsByTagName("tr");
+	var th = tr[0].getElementsByTagName("th");
+	for(var i=0;i<th.length;i++){
+		th[i].onmouseover = function() {
+			if (this.className != "sorttable_nosort") {
+				this.className += ' selected';
+			}
+		}
+		th[i].onmouseout = function() {
+			this.className = this.className.replace(/\ *selected/ig, "");
+		}
+	}
+	for(var i=1;i<tr.length;i++){
+		tr[i].onmouseover = function() {
+			this.className += ' selected';
+		}
+		tr[i].onmouseout = function() {
+			this.className = this.className.replace(/\ *selected/ig, "");
+		}
+	}
+}
+
+function confirmLocation(msg,link) {
+	if (confirm(msg)) {
+		window.location.href=link;
+	}
+}
+
+function confirmSubmit(msg) {
+	return confirm(msg);
+}

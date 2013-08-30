@@ -1,0 +1,112 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Methylation Processing Services</title>
+</head>
+
+<body>
+<h3>Welcome to STAR's Methylation Processing Pipeline
+</h3>
+<p>Please select the file(s) you would like to upload for methylation
+processing in the field below. These files must be in fastq format and
+gzipped (i.e. files have a .fastq.gz suffix).</p>
+<form id="form1" name="form1" enctype="multipart/form-data" method="post"
+action="">
+  <label for="fileField"></label>
+  <input type="file" name="fileField" id="fileField" />
+</form>
+<p>Please select the library information file in the field below.</p>
+<form id="form2" name="form2" method="post" action="">
+  <p>
+    <label for="fileField3"></label>
+    <input type="file" name="fileField2" id="fileField3" />
+  </p>
+</form>
+<p>Each line of the library file must contain the full name of one of the
+fastq files selected above followed by a number, separated by a tab. All
+uploaded sequence files must be listed in this file. Files that share the
+same number are considered from the same sequencing library.</p>
+<p>E-mail address only for notification purposes:</p>
+<form id="form7" name="form7" method="post" action="">
+  <label for="textfield7"></label>
+  <input type="text" name="textfield7" id="textfield7" />
+</form>
+<p>&nbsp;</p>
+<h2>Options:</h2>
+<p>Select Mapping Scheme:</p>
+<form id="form6" name="form6" method="post" action="">
+  <p>
+    <input type="radio" name="radio4" id="radio4" value="radio4" />
+  Map Sequences With Strand Detection</p>
+  <p>
+    <input type="radio" name="radio5" id="radio5" value="radio5" />
+    <label for="radio5"></label>
+    <label for="radio4"></label>
+  Map Sequences Without Strand Detection</p>
+</form>
+<p>&nbsp;</p>
+<p>Strand Detection determines if the bisulfite converted sequence is a PCR
+product or representative of the BSC sequence itself. If the Strand
+Detection algorithm detects that the sequence is a PCR product, it will use
+the reverse complement of the sequence when mapping to the genome. Since
+some sequences are reverse complemented before mapping, only total mismatch
+options are allowed. If you do not used Strand Detection, none of the input
+sequences are not reverse complemented and you may thusly specify error
+thresholds for the typically less reliable sequences at the 3' end.</p>
+<p>&nbsp;</p>
+<p>
+  <label for="radio3"></label>
+</p>
+<p>Sequence Mapping Program:	</p>
+<form id="form3" name="form3" method="post" action="">
+  <p>
+    <input type="radio" name="radio" id="radio" value="radio" />
+    <label for="radio"></label>
+    Bowtie
+	</p>
+  <p>Without Strand Detection:</p>
+  <p>
+    <label for="textfield">	Seed Length </label>
+    <input type="text" name="textfield" id="textfield" />
+  </p>
+  <p>Maximum Seed Mismatches
+    <input type="text" name="textfield2" id="textfield2" />
+</p>
+  <p>Maximum Mismatch Error
+    <input type="text" name="textfield3" id="textfield3" />
+  </p>
+  <p>With Strand Detection:</p>
+  <p>
+    <label for="textfield6"></label>
+  Total Number of Allowed Mismatches
+  <input type="text" name="textfield6" id="textfield6" />
+  </p>
+  <p>
+    <input type="radio" name="radio" id="radio2" value="radio" />
+    <label for="radio2"></label>
+    Soap (2 total mismatches allowed)
+</p>
+</form>
+<p>For Paired-End Reads:</p>
+<form id="form5" name="form5" method="post" action="">
+  <p>
+    <label for="textfield4"></label>
+    Minimum Distance Between Pairs
+    <input type="text" name="textfield4" id="textfield4" />
+  </p>
+  <p>
+    <label for="textfield5"></label>
+  Maximum Distance Between Pairs
+  <input type="text" name="textfield5" id="textfield5" />
+  </p>
+</form>
+<form id="form4" name="form4" method="post" action="">
+  <input type="radio" name="radio3" id="radio3" value="radio3" />
+  Filter for Monoclonal Reads
+</form>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+</body>
+</html>

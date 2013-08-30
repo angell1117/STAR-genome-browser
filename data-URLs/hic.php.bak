@@ -1,0 +1,139 @@
+<?php
+require_once 'includes/common.php';
+
+$table = 'gm06690.1000000';
+$title = 'gm06690.1000000';
+$info  = 'gm06690.1000000';
+$db_dir  = '/data/annoj-hic/';
+
+$file_track_type = 'HicTrack';
+preg_match("/\.([0-9]+)$/",$table, $resolution);
+function get_table_name($url)
+{
+	$url = strstr($url, "http://");
+	if(!$url) return false;
+        $url = substr($url,strlen("http://"));
+
+	$url = strstr($url, "/");
+	if(!$url) return false;
+        $url = substr($url,1);
+	 
+	$url = $_SERVER['DOCUMENT_ROOT']."/".$url;
+	if(!file_exists($url)) return false;
+
+	$fp = fopen($url, "r");
+	if(!$fp) return false;
+	$cnt = 0;
+	while($line = fgets($fp, 1024))
+	{
+		$a = strstr($line,"\$table");
+		if($a)
+		{
+			$p1 = strpos($line, "'");
+			$p2 = strrpos($line, "'");
+			if($p1 && $p2) $db_table = substr($line,$p1+1, $p2-$p1-1);
+		}
+		$a = strstr($line,"\$db_dir");
+		if($a)
+		{
+			$p1 = strpos($line, "'");
+			$p2 = strrpos($line, "'");
+			if($p1 && $p2) $db_dir = substr($line,$p1+1, $p2-$p1-1);
+		}
+		if($db_table && $db_dir) break;
+		if($cnt > 15) break;
+		$cnt++;
+	}
+	fclose($fp);
+	if($db_dir && !ereg("\/$",$db_dir)) $db_dir = $db_dir."/";
+
+	$fname = $db_dir.$db_table."/".$db_table;
+	if(!file_exists($fname.".db01")) return false;
+	return $fname;
+}
+if ($action == 'syndicate')
+{
+	if (isset($title)) $syndication['service']['title'] = $title;
+	if (isset($info))  $syndication['service']['description'] = $info;
+	respond($syndication);
+}
+
+if ($action == 'range')
+{
+	if (1.0 * $bases / $pixels >= 5.0)
+	{
+		get_histogram($urls, $db_dir, $table, $resolution, $assembly, $left, $right, $bases, $pixels);
+	}
+	else
+	{
+		$array = array(
+                        'success' => false,
+                        'message' => 'Server tried to stream result data that does not exist'
+                );
+
+        	$string = json_encode($array);
+		echo $string;
+	 	exit();
+	}
+}
+function get_histogram($urls, $db_dir, $table, $resolution, $assembly, $left, $right, $bases, $pixels)
+{
+	$query = "$urls,$table,$right,$left";
+
+	if (cache_exists($query)) cache_stream($query);
+	$result = array();
+
+	$chrs = explode(",",$urls);
+	$fname = $db_dir.$table."/chr".$chrs[0]."-chr".$chrs[1];
+	$fname1 = $db_dir.$table."/chr".$chrs[1]."-chr".$chrs[0];
+	if(!file_exists($fname) && !file_exists($fname1))
+	{
+		cache_create($query,$result,true);
+		return;
+	}
+	if(file_exists($fname1)) $fname = $fname1;
+	
+	$fp = fopen("/tmp/test.txt","a+");
+	fwrite($fp, "$query, $resolution[0], $resolution[1]\n");
+	fclose($fp);
+
+	$fp = fopen($fname, "r");
+	if(!$fp)
+	{
+		cache_create($query,$result,true);
+		return;
+	}
+
+	$row = 0;
+	while(!feof($fp))
+	{
+		$line = fgets($fp);
+		trim($line);
+		$line = str_replace("\n","",$line);
+
+		$row++;
+		if($line == "") continue;
+
+		$r = explode("\t",$line);
+		//$rr = array_slice($r, 1);
+		$result[] = $r;
+		//unset($rr);
+	}
+	fclose($fp);
+
+	/*
+	foreach ($result as &$content)
+	foreach ($content as &$val)
+	{
+		$val = round($val/200 * 255);
+	}
+	*/
+	//$fp = fopen("/tmp/test.txt","a+");
+	//$string = json_encode($result);
+	//fwrite($fp, "$action2: $string\n");
+	//fwrite($fp, "$left, $right, $bases, $pixels, $resolution[0], $resolution[1]\n");
+	//fclose($fp);
+	cache_create($query,$result,true);
+}
+error('Invalid action requested: ' . $action);
+?>

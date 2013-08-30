@@ -1,0 +1,290 @@
+body
+{
+  font-family: verdana,arial,helvetica,sans-serif,times;
+  font-size: 90%;
+  background-color:#FFFFFF;
+}
+
+table
+{
+  font-family: verdana,arial,helvetica,sans-serif,times;
+  font-size: 100%;
+}
+
+p 
+{
+  font-family: verdana,arial,helvetica,sans-serif,times;
+  margin-left: 1em;
+}
+
+pre
+{
+  margin-left: 1em;
+}
+
+li 
+{
+  padding-top: 3px;
+  padding-bottom: 3px;
+}
+
+em 
+{
+  font-weight: bold;
+  font-style: italic;
+}
+
+.rule
+{
+  margin-left: 10%;
+  width: 80%;
+  background-color: #fc6;
+  font-size: 2px;
+  height: 2px;
+  border: 0px;
+}
+
+.centered
+{
+  margin-left: 10%;
+  width: 80%;
+}
+
+.titletext 
+{
+  font-size: 20pt;
+}
+
+.navbar
+{
+  position: relative;
+  right: -200px;
+  bottom: -50px;
+  margin-top: 10px;
+  margin-right: 10px;
+  text-align: left;
+}
+
+.navbar span 
+{
+  border-left: 1px solid #777;
+  padding-left: 10px;
+}
+
+.navbar a
+{
+  color: #070;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.wrapper 
+{
+  margin-top: 10px;
+  width: 700;
+}
+
+.error { color: #cc0000; }
+
+.ulshort { margin-top: 2 }
+
+code, pre, tt {
+  font-family: Courier, "Courier New", monospace;
+}
+
+h1 {
+  font-family: verdana,arial,helvetica,sans-serif;
+  font-size: 130%;
+  font-weight: bold;
+  color: #006600;
+}
+
+h2 
+{
+  margin-top: 15px;
+  font-family: verdana,arial,helvetica,sans-serif;
+  font-size: 125%;
+  font-weight: bold;
+  color: #006600;
+}
+
+h3 
+{
+  margin-top: 15px;
+  font-family: verdana,arial,helvetica,sans-serif;
+  font-size: 110%;
+  font-weight: bold;
+  color: #006600;
+}
+
+h4 
+{
+  margin-top: 15px;
+  font-family: verdana,arial,helvetica,sans-serif;
+  font-size: 100%;
+  font-weight: bold;
+  color: #006600;
+}
+
+small {
+  font-family: verdana,arial,helvetica,sans-serif;
+  font-size: 80%;
+}
+
+a.exportdata {
+  font-size: 80%;
+}
+
+a.small {
+  color: black;
+  font-family: verdana,arial,helvetica,sans-serif;
+  font-weight: bold;
+  font-size: 80%;
+  text-decoration: none;
+}
+
+.tableTitle {
+  font-family: verdana,arial,helvetica,sans-serif;
+  font-weight: bold;
+}
+
+.tableExtras {
+  font-family: verdana,arial,helvetica,sans-serif;
+  font-size: 85%;
+  color: #FFFFFF;
+}
+
+input {
+  font-family: verdana,arial,helvetica,sans-serif;
+}
+
+textarea {
+  font-family: verdana,arial,helvetica,sans-serif;
+}
+
+input.small, select.small {
+  font-family: verdana,arial,helvetica,sans-serif;
+  font-size: 80%;
+}
+
+textarea.small {
+  font-family: verdana,arial,helvetica,sans-serif;
+  font-size: 80%;
+}
+
+p.formerror {
+  border: 1px solid #ff0000;
+  color: #000000;
+  background: #ffeeee;
+  padding: 2px 4px;
+}
+
+div.errors {
+  border: 1px dashed #666600;
+  color: #660000;
+  background: #ffeeee;
+  margin: 4px;
+  padding: 6px;
+}
+
+#sidebar {
+  float: left;
+  width: 200px;
+  height: 90%;
+  padding-top: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  padding-bottom: 10px;
+  background-color: #f0fff0;
+  border-right: 1px solid #CCC
+}
+
+#sidebar h2 {
+  color: #006600;
+}
+
+#sidebar h3 {
+  color: #006600;
+}
+
+#sidebar ul {
+  margin-left: 20;
+  padding-left: 0;
+}
+
+#sidebar li {
+  list-style-type: circle;
+}
+
+.subsidebar
+{
+  margin-left: 5px;
+}
+
+fieldset
+{
+  display: block;
+  border: 0;
+  border-top: 1px solid #fc6;
+}
+
+legend
+{
+  margin-top: 10px;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #b82;
+}
+
+fieldset textarea
+{
+  display: block;
+}
+
+fieldset label
+{
+  display: block;
+}
+
+.header
+{
+  padding-bottom: 50px;
+}
+
+.content
+{
+  clear: left;
+}
+
+#logo
+{
+  margin-right: 10px;
+  float: left;
+}
+
+dt
+{
+  font-weight: bold;
+  margin-top: 5px;
+  margin-left: 20px;
+}
+.input_on{
+	padding:2px 8px 0pt 3px;
+	border:1px solid #999;
+	background-color:#FFFFCC;
+}
+.input_off{
+	padding:2px 8px 0pt 3px;
+	border:1px solid #CCC;
+	background-color:#FFF;
+}
+.input_move{
+	padding:2px 8px 0pt 3px;
+	border:1px solid #999;
+	background-color:#FFFFCC;
+}
+.input_out{
+	padding:2px 8px 0pt 3px;
+	border:1px solid #CCC;
+	background-color:#FFF;
+}
