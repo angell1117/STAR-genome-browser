@@ -29,7 +29,7 @@ have been installed in most Linux distributions. If they were installed already,
 JPEG, GD and LIBPNG are only required when you want to use graphical functions and modules 
 in PHP.
 
-before installation, let us suppose: ${destdir} = /usr/local
+before installation, suppose that: ${destdir} = /usr/local
 --------------------------------------------------------------------------------
 1. GNU C++ (required, may be installed defaultly)
 	(1) download gcc-x.x.x.tar.gz from http://gcc.gnu.org/
@@ -175,5 +175,3 @@ rewrite and proxy modules can help to solve this problem. That's the purpose of 
 
 If you can see the correct result, your Apache, PHP and berkeley DB were correctly installed.
 -----------------------------------------------------------------------------------------------
-
-Please email to super_wt@sina.com if you have problems when using this package and STAR genome browser. 
