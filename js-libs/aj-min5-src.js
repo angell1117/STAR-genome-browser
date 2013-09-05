@@ -1153,10 +1153,12 @@ AnnoJ.Navigator = function() {
             selectOnFocus: true
         });
         Baseline.on('specialKey',
-            function(config, event) {
-                var val = Baseline.getValue();
-                if(val == "") Baseline.setValue(AnnoJ.config.settings.baseline);
-                AnnoJ.config.settings.baseline = Baseline.getValue()
+          function(config, event) {
+            var val = Baseline.getValue();
+            if(val == "") Baseline.setValue(AnnoJ.config.settings.baseline);
+            AnnoJ.config.settings.baseline = Baseline.getValue();
+            refreshControls();
+            self.fireEvent('browse', Navigator.getLocation())
         });
 
         var checked1 = true;
@@ -1175,63 +1177,61 @@ AnnoJ.Navigator = function() {
                 checked: !checked1
             }],
             changeHandler: function(btn, item) {
-                if(item.text == "Heatmap") AnnoJ.config.settings.display = 1;
-                else AnnoJ.config.settings.display = 0;
+              if(item.text == "Heatmap") AnnoJ.config.settings.display = 1;
+              else AnnoJ.config.settings.display = 0;
 
-                var Tracks = AnnoJ.getGUI().Tracks;
-                if(Tracks){
-                    for(var i in Tracks.tracks.tracks){
-                        var track = Tracks.tracks.tracks[i];
-                        if(AnnoJ.config.settings.display == 1){
-                            if(track.setHeatmapHeight) track.setHeatmapHeight(20);
-                            if(track.Toolbar) track.Toolbar.hide()
-                        }
-                        if(AnnoJ.config.settings.display == 0){
-                            var height = findConf(track.config.id).height;
-                            track.setHeight(height);
-                            if(track.Toolbar) track.Toolbar.show()
-                        }
-                    }
+              var Tracks = AnnoJ.getGUI().Tracks;
+              if(Tracks){
+                for(var i in Tracks.tracks.tracks){
+                  var track = Tracks.tracks.tracks[i];
+                  if(AnnoJ.config.settings.display == 1){
+                    if(track.setHeatmapHeight) track.setHeatmapHeight(20);
+                    if(track.Toolbar) track.Toolbar.hide()
                   }
+                  if(AnnoJ.config.settings.display == 0){
+                    var height = findConf(track.config.id).height;
+                    track.setHeight(height);
+                    if(track.Toolbar) track.Toolbar.show()
+                  }
+                }
+              }
             }
         });
 		
         
         if(AnnoJ.config.settings.scale == 0) {
-			checked1 = true;
-			checked2 = false;		
+           checked1 = true;
+           checked2 = false;		
         }
-		if(AnnoJ.config.settings.scale == 1) {
-            checked1 = false;
-            checked2 = true
+        if(AnnoJ.config.settings.scale == 1) {
+          checked1 = false;
+          checked2 = true
         }
         if(AnnoJ.config.settings.scale == 2) {
-            checked1 = false
-            checked2 = false
+          checked1 = false
+          checked2 = false
         }
         var scaleMode = new Ext.CycleButton({
-            showText: true,
-            prependText: 'Scale:',
-            tooltip: 'Scaling method for multiple tracks',
-            items: [{
-                text: 'Fixed(Genome)',
-                checked: !checked1 && !checked2
-                },
-                {
-                    text: 'Individual(Screen)',
-                    checked: checked1
-                },
-                {
-                    text: 'Uniform(Screen)',
-                    checked: checked2
-                }],
-                changeHandler: function(btn, item) {
-					
-                    if(item.text == "Uniform(Screen)") AnnoJ.config.settings.scale = 1;
-                    else if(item.text == "Fixed(Genome)") AnnoJ.config.settings.scale = 2;
-                    else AnnoJ.config.settings.scale = 0;
-					
-                }
+          showText: true,
+          prependText: 'Scale:',
+          tooltip: 'Scaling method for multiple tracks',
+          items: [{
+             text: 'Fixed(Genome)',
+             checked: !checked1 && !checked2
+             },
+             {
+              text: 'Individual(Screen)',
+              checked: checked1
+             },
+             {
+              text: 'Uniform(Screen)',
+              checked: checked2
+             }],
+             changeHandler: function(btn, item) {
+               if(item.text == "Uniform(Screen)") AnnoJ.config.settings.scale = 1;
+               else if(item.text == "Fixed(Genome)") AnnoJ.config.settings.scale = 2;
+               else AnnoJ.config.settings.scale = 0;
+             }
         });
         var scaleBox = new Ext.form.TextField({
             width: 30,
@@ -1600,7 +1600,23 @@ AnnoJ.Navigator = function() {
     });
     
     var ehandler =  function(method){
-        if(!AnnoJ.config.trks) return;
+        if(!AnnoJ.config.trks) 
+        {
+          Ext.MessageBox.alert('Warning', 'No track selected!');
+          return
+        }
+        if(AnnoJ.config.trks.length != 1 && method == 'Peakcall') 
+        {
+          Ext.MessageBox.alert('Warning', 'Only one track can be selected each time!');
+          return
+        }
+        if(AnnoJ.config.trks.length < 2 && method != 'Peakcall' && method != 'Intensity') 
+        {
+          Ext.MessageBox.alert('Warning', 'Please select at least 2 tracks!');
+          return
+        }
+        if(method == 'Peakcall') 
+          Ext.MessageBox.alert('Info', 'Peak calling usually takes several minutes. If log-out, re-do the peak calling and the back-end results would be immediately shown if finished!');
 
         var trackConfig = {};
         trackConfig.urls = '';
@@ -1608,6 +1624,10 @@ AnnoJ.Navigator = function() {
         var first = null;
         var newid = '';
         var newname = '';
+        var reftrack = '';
+        var subtract_info = '';
+        var corr_info = '';
+        var intensity_info = '';
         for(var i = 0; i < AnnoJ.config.trks.length; i++){
           var id = AnnoJ.config.trks[i];
           var track = AnnoJ.getGUI().Tracks.tracks.find('id', id);
@@ -1615,12 +1635,33 @@ AnnoJ.Navigator = function() {
             trackConfig.urls += track.config.data + ',';
             newid += '-' + track.config.id;
             newname += '-' + track.config.name;
-            if(!first ) first = track
+            if(!first ){
+               reftrack = track.config.name;
+               subtract_info = reftrack;
+               intensity_info = reftrack;
+               first = track
+            }
+            else{
+              if(method == 'Subtract')
+                subtract_info += ' - ' + track.config.name;
+              if(method == 'Correlation')
+                corr_info += reftrack + ' vs. ' + track.config.name + ' ';
+              if(method == 'Intensity')
+                intensity_info += ', ' + track.config.name;
+            }
           }
         }
+        if(method == 'Subtract') Ext.MessageBox.alert('Subtract info', subtract_info);
+        if(method == 'Correlation') Ext.MessageBox.alert('Correlation pairs', corr_info);
+        if(method == 'Intensity') Ext.MessageBox.alert('Intensity(by track order)', intensity_info);
+
         var loc = AnnoJ.getLocation();
         trackConfig.data = '/proxy/http://tabit.ucsd.edu/fetchers/analysis.php';
-        trackConfig.name = method + newname;
+        if(method == 'Intensity' || method == 'Correlation')
+          trackConfig.name = '';
+        else
+          trackConfig.name = "<font color=#0000FF>"+ method + newname + "</font>";
+
         trackConfig.type = 'ReadsTrack';
         trackConfig.path = 'analysis';
         trackConfig.action = method;
@@ -1657,6 +1698,7 @@ AnnoJ.Navigator = function() {
                bases: loc.bases,
                pixels: loc.pixels,
                action2: method,
+               baseline: AnnoJ.config.settings.baseline,
                urls: trackConfig.urls,
                tracktype: trackConfig.type,
                table: trackConfig.name
@@ -4751,9 +4793,12 @@ var HistogramCanvas = function() {
     if(AnnoJ.config.settings.scale == 1) AnnoJ.config.max = max;
     if(AnnoJ.config.settings.scale == 2) max = AnnoJ.config.settings.yaxis;
 
-    if(max == null) msg = "";
-    else if(id == 'trackyyyy-0') msg = 1;
+    if(max == null || id == 'trackyyyy-0') msg = "";
     else msg = Math.round(max / scaler*10)/10;
+    
+    var ispeakcall = 0;
+    if(id.indexOf('new-Peakcall') >= 0)
+      ispeakcall = 1;
 
     if(AnnoJ.config.settings.display == 0){
         if(lane.indexOf("AJ_above") != -1) brush.fillText(msg, 2, 10);
@@ -4768,6 +4813,11 @@ var HistogramCanvas = function() {
         if(InfoRequest.corr.length == 0) return;
         var h = AnnoJ.config.infoTrack.height / 2;
         var w = Math.ceil(200 / InfoRequest.corr.length);
+        var max_val = 0;
+        for(var i = 0; i < InfoRequest.corr.length; i++){
+          if(max_val < Math.abs(InfoRequest.corr[i])) 
+            max_val = Math.abs(InfoRequest.corr[i])
+        }
         for(var i = 0; i < InfoRequest.corr.length; i++){
           var val = InfoRequest.corr[i];
           var label = val.toString();
@@ -4775,15 +4825,15 @@ var HistogramCanvas = function() {
           if(pos >= 0) label = label.substr(0,pos+3);
           if(lane.indexOf("AJ_above") != -1 && val > 0){
             brush.fillStyle = clist[0];
-            brush.fillRect(10 + i*w + 1, h * (1 - val) , w - 2, h*val);
+            brush.fillRect(10 + i*w + 1, h * (1 - val*0.75/max_val) , w - 2, h*0.75*val/max_val);
             brush.fillStyle = clist[2];
-            brush.fillText(label,10 + i*w, h * (1 - val) - 2);
+            brush.fillText(label,10 + i*w + 2, h * (1 - val*0.75/max_val) - 2);
           }
           if(lane.indexOf("AJ_below") != -1 && val < 0){
             brush.fillStyle = clist[2];
-            brush.fillRect(10 + i*w + 1, 0 , w - 2, -h*val);
+            brush.fillRect(10 + i*w + 1, 0 , w - 2, -h*0.75*val/max_val);
             brush.fillStyle = clist[0];
-            brush.fillText(label,10 + i*w, -h*val + 10);
+            brush.fillText(label,10 + i*w + 2, -h*val + 10);
           }
         }
         return
@@ -4807,7 +4857,8 @@ var HistogramCanvas = function() {
       function(datum) {
          var w = datum.w || 1;
          var h = datum.y;
-         h -= AnnoJ.config.settings.baseline;
+         if(ispeakcall == 0)
+           h -= AnnoJ.config.settings.baseline;
          if(h <= 0) return;
          h /= max;
          h = Math.round(h * height * scaler);
@@ -4824,6 +4875,7 @@ var HistogramCanvas = function() {
            brush.fillRect(x, y, w, h);
          else{
             var r = Math.ceil((datum.y - AnnoJ.config.settings.baseline) / max  * 512);
+            if(ispeakcall > 0) r = Math.ceil(datum.y/ max  * 512);
             var g = 255 - r;
             r -= 255;
             if(r > 255) r = 255;
@@ -5869,7 +5921,8 @@ AnnoJ.BaseTrack = function(userConfig) {
         
         var items;
         if(isInfo(self.config.id) || self.config.id == 'trackyyyy-0'){
-            items = [title, val, scale_box, spacer];
+            //items = [title, val, scale_box, spacer];
+            items = [title];
         }else if(self.config.type == "ModelsTrack"){
             items = [closeButton, title, filler, val, scale_box, toggleButton, spacer];
         }else if(self.config.id.indexOf('new-') != -1){    
@@ -6013,7 +6066,8 @@ AnnoJ.DataTrack = function(userConfig) {
             self.fireEvent('describe', self.Syndicator.getSyndication())
         }
     });
-    this.Toolbar.insert(1, infoButton);
+    if(self.config.id != 'trackyyyy-0')
+      this.Toolbar.insert(1, infoButton);
     this.Communicator = (function() {
         var busy = false;
         function isBusy() {
@@ -6430,7 +6484,7 @@ AnnoJ.BrowserTrack = function(userConfig) {
             var actions = '';
             if(self.config.id == 'trackyyyy-0'){
                 sources = AnnoJ.config.infoTrack.urls;
-                 actions = AnnoJ.config.infoTrack.action
+                actions = AnnoJ.config.infoTrack.action
             }
             var tables = '';
             if(self.config.id != 'trackyyyy-0' && self.config.id != 'trackxxxx-0'){
@@ -6474,6 +6528,7 @@ AnnoJ.BrowserTrack = function(userConfig) {
                     bases: policy.bases,
                     pixels: policy.pixels,
                     action2: actions,
+                    baseline: AnnoJ.config.settings.baseline,
                     urls: sources,
                     tracktype: self.config.type,
                     table: tables
@@ -6505,8 +6560,9 @@ AnnoJ.BrowserTrack = function(userConfig) {
                     state.busy = false;
                     state.ready = true;
                     if(self.config.id.indexOf('Peakcall-') >= 0)
-                      self.setTitle(self.config.name+"<font color=#FF0000>(in progress...)</font>")
-                    //else self.setTitle(self.config.name+"<font color=#FF0000>(no data...)</font>")
+                      self.setTitle(self.config.name+"<font color=#FF0000>(in progress, please drag the screen to refresh...)</font>")
+                    else
+                      self.setTitle(self.config.name+"<font color=#FF0000>(Failed!)</font>")
                 }
             })
         };
