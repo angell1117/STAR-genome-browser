@@ -156,15 +156,12 @@ System environment and module installations:
 	(12) Then in your php.ini file add: extension=db4.so
 	(13) mkdir ${your-db-dir}
 
---------------------------------------------------------------------------------
-11. Install Proxy rewrite rules
+11. Configure Proxy, rewrite module of Apache
 	(1) In your httpd.conf, find the section:"AllowOverride None" and modify it to "AllowOverride All".
 	This will allow apache server to support additional .htaccess file to rewrite url.
 	(2) Create a .htaccess file and put it in the document root directory. Add the RewriteRules in your
 	.htaccess file. Please find a .htaccess example file in this package.
 
-Note: Due to security problem, the program does not support retrieving data from crossdomain. Using the apache rewrite and proxy modules can help to solve this problem. 
---------------------------------------------------------------------------------
 12. Final step to test your system
 	(1) put simple_counter.php to your web document root
 	(2) visit http://yourdomain/simple_counter.php
