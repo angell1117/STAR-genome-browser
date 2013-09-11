@@ -24,12 +24,9 @@ Required software packages:
 * Berkeley DB 	http://www.oracle.com/technetwork/database/berkeleydb/downloads/index.html
 * Apache 	http://httpd.apache.org/
 
-Use following steps to install above mentioned packages. Normally GNU C++, PERL and APACHE
-have been installed in most Linux distributions. If they were installed already, skip it. 
-JPEG, GD and LIBPNG are only required when you want to use graphical functions and modules 
-in PHP.
+Normally GNU C++, PERL and APACHE have been installed in most Linux OS distributions. If they were installed already, just skip those steps.JPEG, GD and LIBPNG are only required when you want to use graphical functions and modules in PHP. Below sections give some installation instructions. Please find specific help in each module: 
 
-before installation, suppose that: ${destdir} = /usr/local
+System environment and module installations:
 --------------------------------------------------------------------------------
 1. GNU C++ (required, may be installed defaultly)
 	(1) download gcc-x.x.x.tar.gz from http://gcc.gnu.org/
@@ -166,12 +163,8 @@ before installation, suppose that: ${destdir} = /usr/local
 	(2) Create a .htaccess file and put it in the document root directory. Add the RewriteRules in your
 	.htaccess file. Please find a .htaccess example file in this package.
 
-Note: Due to security problem, the program doesn't support retrieving data from crossdomain. Using the apache
-rewrite and proxy modules can help to solve this problem. That's the purpose of this section.
+Note: Due to security problem, the program does not support retrieving data from crossdomain. Using the apache rewrite and proxy modules can help to solve this problem. 
 --------------------------------------------------------------------------------
 12. Final step to test your system
 	(1) put simple_counter.php to your web document root
 	(2) visit http://yourdomain/simple_counter.php
-
-If you can see the correct result, your Apache, PHP and berkeley DB were correctly installed.
------------------------------------------------------------------------------------------------
