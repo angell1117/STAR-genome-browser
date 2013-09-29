@@ -288,7 +288,8 @@ function show_track() {
 			if (strlen($ids)>1500) {
 				goBack("Too many tracks in one configuration. Try less tracks please.");
 			}
-			$query = "insert into configuration (conf_name, build_date, description, start_chr, start_pos, bases, pixels, trk_ids, trk_hts, user_id) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+			$view_cnt = 0;
+			$query = "insert into configuration (conf_name, build_date, description, start_chr, start_pos, bases, pixels, trk_ids, trk_hts, user_id, lastview_date, view_count) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 			$stmt = $db->prepare($query);
 			$stmt->bindParam(1, $conf_name);
 			$stmt->bindParam(2, $datestr);
@@ -300,6 +301,8 @@ function show_track() {
 			$stmt->bindParam(8, $ids);
 			$stmt->bindParam(9, $hts);
 			$stmt->bindParam(10, $username);
+			$stmt->bindParam(11, $datestr);
+			$stmt->bindParam(12, $view_cnt);
 			$stmt->execute() or goBack("Error happened. Please try later.");
 			$newid = $db->lastInsertId();
 			$_SESSION['conf_id'] = $newid;
@@ -1280,7 +1283,7 @@ function show_conf() {
 		$output[] = 'You have not saved any configurations yet. Please click "Create A New Configuration".';
 		return join('', $output);
 	}
-	$query = "select conf_id, conf_name, build_date, if (length(description) > 25, concat(substr(description, 1, 25), '...'), description) as conf_desc from configuration where user_id = :username";
+	$query = "select conf_id, conf_name, build_date, if (length(description) > 25, concat(substr(description, 1, 25), '...'), description) as conf_desc,lastview_date, view_count from configuration where user_id = :username";
 	$keyword = $_POST['keyword'];
 	if ((empty($_POST['dorm'])) and (empty($_POST['showall'])) and (!empty($keyword))) {
 		$flag1 = 1;
@@ -1549,7 +1552,8 @@ function modify_aj_conf() {
 				$datestr = get_date();
 				$conf_desc = '';
 				$user_id = $_SESSION['username'];
-				$query = "insert into configuration (conf_name, build_date, description, start_chr, start_pos, bases, pixels, trk_ids, trk_hts, user_id) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+				$view_cnt = 0;
+				$query = "insert into configuration (conf_name, build_date, description, start_chr, start_pos, bases, pixels, trk_ids, trk_hts, user_id, lastview_date, view_count) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 				$stmt = $db->prepare($query);
 				$stmt->bindParam(1, $conf_name);
 				$stmt->bindParam(2, $datestr);
@@ -1561,6 +1565,8 @@ function modify_aj_conf() {
 				$stmt->bindParam(8, $ids_new);
 				$stmt->bindParam(9, $hts_new);
 				$stmt->bindParam(10, $user_id);
+				$stmt->bindParam(11, $datestr);
+				$stmt->bindParam(12, $view_cnt);
 				$stmt->execute() or goBack("Error happened. Please try later.");
 				$newid = $db->lastInsertId();
 				$_SESSION['newflag'] = $newid;
@@ -1696,7 +1702,8 @@ function save_conf($conf_name, $conf_desc, $start_chr, $start_pos, $bases, $pixe
 	} else {
 		// Add a new record in configuration table.
 		$user_id = $_SESSION['username'];
-		$query = "insert into configuration (conf_name, build_date, description, start_chr, start_pos, bases, pixels, trk_ids, trk_hts, user_id) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+		$view_cnt = 0;
+		$query = "insert into configuration (conf_name, build_date, description, start_chr, start_pos, bases, pixels, trk_ids, trk_hts, user_id, lastview_date, view_count) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 		$stmt = $db->prepare($query);
 		$stmt->bindParam(1, $conf_name);
 		$stmt->bindParam(2, $datestr);
@@ -1708,6 +1715,8 @@ function save_conf($conf_name, $conf_desc, $start_chr, $start_pos, $bases, $pixe
 		$stmt->bindParam(8, $trk_ids);
 		$stmt->bindParam(9, $trk_hts);
 		$stmt->bindParam(10, $user_id);
+		$stmt->bindParam(11, $datestr);
+		$stmt->bindParam(12, $view_cnt);
 		$stmt->execute() or goBack("Error happened. Please try later.");
 		$_SESSION['conf_id'] = $db->lastInsertId();
 	}

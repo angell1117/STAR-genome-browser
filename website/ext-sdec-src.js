@@ -585,6 +585,8 @@ var AnnoJ = (function() {
         var formatStr = "<INPUT type='button' value='View', cls: 'x-btn-icon', onclick='javscript:return false;' class='view_conf'><INPUT type='button' value='Edit' onclick='javscript:return false;' class='edit_conf'>"; 
         return "<div class='controlBtn'>" + formatStr + "</div>";
       }.createDelegate(this)},
+      {header:'Last view',dataIndex:'lastview_date', sortable: true},
+      {header:'Times',dataIndex:'view_count', sortable: true},
       {header:'Description',dataIndex:'conf_desc', sortable: true}
     ]);
     var ds = new Ext.data.GroupingStore({
@@ -600,9 +602,11 @@ var AnnoJ = (function() {
       [{ name: 'conf_name'},
        { name: 'build_date'},
        { name: 'conf_id'},
-       { name: 'conf_desc'}
+       { name: 'conf_desc'},
+       { name: 'lastview_date'},
+       { name: 'view_count'}
       ]),
-      sortInfo:{field:'build_date',direction:"DESC"},
+      sortInfo:{field:'lastview_date',direction:"DESC"},
       remoteSort: true
     });
     
@@ -1519,7 +1523,7 @@ var AnnoJ = (function() {
        title: '',
        region: 'west',
        iconCls: 'silk_wrench',
-       width: screen.width/3,
+       width: screen.width/3 + 50,
        defaults:{autoScroll:false},
        collapsible: true,
        split: true,
@@ -1540,7 +1544,7 @@ var AnnoJ = (function() {
       if(swfu) swfu.cancelQueue();
       if(swfu1) swfu1.cancelQueue();
       newcard.getUpdater().refresh();
-      West.setWidth(screen.width/3);
+      West.setWidth(screen.width/3 + 50);
       Container.setVisible(true)
       if(newcard.activeTab.title == 'Documentation'){
         West.setWidth(screen.width);

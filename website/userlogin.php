@@ -32,10 +32,10 @@ $query = "select PASSWD, group_id from user where user_id = ? and user_status=1"
 $stmt = $db->prepare($query);
 $stmt->bindParam(1, $username);
 $stmt->execute() or goBack("Error happened. Please try later.");
-$row = $stmt->fetch();
-if(!$row['group_id']){	// Authentication failed.
-	goBack("This user doesn't exist or isn't activated.");
-} else {	// Register user name and password in session variables.
+if($stmt->rowCount() == 0){     // Authentication failed.
+        goBack("This user doesn't exist or isn't activated.");
+} else {        // Register user name and password in session variables.
+        $row = $stmt->fetch();
 	$tpasswd = $row['PASSWD'];
 	if ($tpasswd != $passwd) {
 		goBack("The password is incorrect.");

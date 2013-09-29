@@ -119,7 +119,8 @@ function show_track() {
         if (strlen($trkids)>1500) {
             goBack("Too many tracks!");
         }
-        $query = "insert into configuration (conf_name, build_date, description, start_chr, start_pos, bases, pixels, trk_ids, trk_hts, user_id) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+	$view_cnt = 0;
+        $query = "insert into configuration (conf_name, build_date, description, start_chr, start_pos, bases, pixels, trk_ids, trk_hts, user_id, lastview_date, view_count) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         $stmt = $db->prepare($query);
         $stmt->bindParam(1, $conf_name);
         $stmt->bindParam(2, $datestr);
@@ -131,6 +132,8 @@ function show_track() {
         $stmt->bindParam(8, $trkids);
         $stmt->bindParam(9, $trkhts);
         $stmt->bindParam(10, $username);
+        $stmt->bindParam(11, $datestr);
+        $stmt->bindParam(12, $view_cnt);
         $stmt->execute() or goBack("Database error!");
         Msg(true, 'OK!');
     }
@@ -166,10 +169,10 @@ function show_track() {
 
 	//for encode by jhy
         $temp = $_POST['temp'];
-		$myusername=$username;
-		if($temp==1){
-			$myusername=$myusername.".temp";
-		}
+	$myusername=$username;
+	if($temp==1){
+		$myusername=$myusername.".temp";
+	}
 	//for encode by jhy
 	
         $datestr = get_date();
@@ -326,7 +329,7 @@ function show_conf() {
     if(!$stmt) goBack("Error happened. Please try later.");
     $num_rows = $stmt->fetchColumn(0);
 
-    $query = "select conf_id, conf_name, build_date, if (length(description) > 25, concat(substr(description, 1, 25), '...'), description) as conf_desc from configuration where (user_id = :username or user_id = 'demo')";
+    $query = "select conf_id, conf_name, build_date, if (length(description) > 25, concat(substr(description, 1, 25), '...'), description) as conf_desc, lastview_date, view_count from configuration where (user_id = :username or user_id = 'demo')";
 
     $direction  = 'asc';
     $sort_field = 'upload_date';
@@ -399,7 +402,7 @@ function search_aj_conf(){
     if(!$stmt) goBack("Error happened. Please try later.");
     $num_rows = $stmt->fetchColumn(0);
 
-    $query = "select conf_id, conf_name, build_date, if (length(description) > 25, concat(substr(description, 1, 25), '...'), description) as conf_desc from configuration where (user_id = :username or user_id = 'demo')";
+    $query = "select conf_id, conf_name, build_date, if (length(description) > 25, concat(substr(description, 1, 25), '...'), description) as conf_desc, lastview_date, view_count from configuration where (user_id = :username or user_id = 'demo')";
 
     $direction  = 'asc';
     $sort_field = 'upload_date';
@@ -632,6 +635,13 @@ function gen_aj_inst() {
     // Generate html file.
     $htmlpool = $html_left . $conf_name . '.js' . $html_right;
     file_put_contents($file_name_base.'.html', $htmlpool);
+
+    $qq = "update configuration set lastview_date = ?, view_count = (view_count + 1) where conf_id = ?";
+    $stmt = $db->prepare($qq);
+    $datestr = get_date();
+    $stmt->bindParam(1, $datestr);
+    $stmt->bindParam(2, $conf_id);
+    $stmt->execute() or goBack("Database error!");
 
     // return the generated html.
     $target_url = $url_root . $gen_directory1 . $conf_name . '.html';

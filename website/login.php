@@ -44,21 +44,12 @@ Best Viewed In
 <a href="http://www.google.com/chrome" target="_blank"><img  src="img/chrome_logo_sm.jpg" style="border:0;width:100;height:40" /></a>
 <a href="http://www.google.com/chrome" target="_blank"><img  src="img/IE9_logo.jpg" style="border:0;width:100;height:40" /></a>
 
-<!--Paste the code below into the html of your pages exactly as it appears. Place the code on all the pages you wish to track.
-
-<A href="/"><img src='http://www.speedcounter.com/count.php?counterid=15325&theme=15' style="border:0" ALT="" ></a><br>
-<script>CID=15325;</script>
-<script language="Javascript" SRC='http://www.speedcounter.com/count.js'></script>
-<i><font size="1" color="666666" face="Times new roman, Times, serif"><A href="http://www.speedcounter.com/"></a></font></i>-->
-
-<!--End SpeedCounter-->
-
 </br>
 </br>
 
-<!-- Counter Code START -->
+<!-- Counter Code start
 <a href="http://www.e-zeeinternet.com/" target="_blank"><img src="http://www.e-zeeinternet.com/count.php?page=964724&style=embwhite&nbdigits=4&reloads=1" alt="HTML Hit Counter" title="Hits since 2013/05/10" border="0" ></a><br><a href="http://www.e-zeeinternet.com/" title="HTML Hit Counter" target="_blank" style="font-family: Geneva, Arial, Helvetica, sans-serif; font-size: 10px; color: #000000; text-decoration: none;"></a>
-<!-- Counter Code END -->
+Counter Code END -->
 
 
 <script>
