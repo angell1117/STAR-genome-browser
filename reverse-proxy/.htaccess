@@ -1,0 +1,75 @@
+###
+# Sample .htaccess file for Apache 2
+# EXAMPLE ONLY, use at your own risk
+# Ensure that AllowOverride is enabled in the httpd.conf
+# Ensure that mod_rewrite is enabled and functional
+# Ensure that ProxyRequests are Off
+###
+
+# Restrict access if you wish. A good idea when testing.
+Order Deny,Allow
+# Deny from All
+Allow from All
+# Allow from localhost
+# Allow from modem.ucsd.edu
+# Allow from 132.239.68.34
+# Allow from 124.169.112.96
+# Allow from 192.168.0.12
+
+
+# For this to work, mod_rewrite must be enabled in your httpd.conf
+RewriteEngine On
+#LogLevel alert rewrite:trace3
+RewriteBase /
+
+# Any number of rewrite rules may be added, typically one per remote service is the most secure
+# Whatever URL you use should match what you put in your AJ config file. The more specific the better
+# Note: Apache2 collapses //// to / hence we need a little change to make the embedded URL trick work
+
+#RewriteRule ^proxy/http:/(modem.ucsd.edu/annoj/hg18.php)$ http://$1 [P,L]
+#RewriteRule ^proxy/http:/(modem.ucsd.edu/annoj/histone.php)$ http://$1 [P,L]
+#RewriteRule ^proxy/http:/tabit.ucsd.edu/fetchers/(.*).php$ http://tabit.ucsd.edu/fetchers/$1.php [P,L]
+
+RewriteRule ^proxy/http:/modem.ucsd.edu/annoj/(.*).php$ http://modem.ucsd.edu/annoj/$1.php [P,L]
+RewriteRule ^proxy/http:/chara.ucsd.edu/testbin/(.*).php$ http://chara.ucsd.edu/testbin/$1.php [P,L]
+RewriteRule ^proxy/http:/chara.ucsd.edu/fetchers/(.*).php$ http://chara.ucsd.edu/fetchers/$1.php [P,L]
+RewriteRule ^proxy/http:/132.239.156.230/annojphp/(.*).php$ http://132.239.156.230/annojphp/$1.php [P,L]
+RewriteRule ^proxy/http:/expresso.chem.ucsd.edu/annojphp/(.*).php$ http://expresso.chem.ucsd.edu/annojphp/$1.php [P,L]
+RewriteRule ^proxy/http:/enhancer.ucsd.edu/annoj/(.*).php$ http://enhancer.ucsd.edu/annoj/$1.php [P,L]
+RewriteRule ^proxy/http:/chromosome.ucsd.edu/annoj/(.*).php$ http://chromosome.ucsd.edu/annoj/$1.php [P,L]
+RewriteRule ^proxy/http:/198.202.90.147/annoj/(.*).php$ http://198.202.90.147/annoj/$1.php [P,L]
+RewriteRule ^proxy/http:/ara.ucsd.edu/annojphp/(.*).php$ http://ara.ucsd.edu/annojphp/$1.php [P,L]
+RewriteRule ^proxy/http:/neomorph.salk.edu/hs/fetchers/(.*).php$ http://neomorph.salk.edu/hs/fetchers/$1.php [P,L] 
+RewriteRule ^proxy/http:/tabit.ucsd.edu/annojphp/(.*).php$ http://tabit.ucsd.edu/annojphp/$1.php [P,L] 
+RewriteRule ^proxy/http:/tabit.ucsd.edu/ZhengRNASeq/(.*).php$ http://tabit.ucsd.edu/ZhengRNASeq/$1.php [P,L] 
+RewriteRule ^proxy/http:/tabit.ucsd.edu/sdec/(.*).php$ http://tabit.ucsd.edu/sdec/$1.php [P,L] 
+RewriteRule ^proxy/http:/chianti.ucsd.edu/Spombe_cellcycle/star/fetchers/models/(.*).php$ http://chianti.ucsd.edu/Spombe_cellcycle/star/fetchers/models/$1.php [P,L]
+RewriteRule ^proxy/http:/tabit.ucsd.edu/fetchers/(.*).php$ http://tabit.ucsd.edu/fetchers/$1.php [P,L]
+RewriteRule ^proxy/http:/tabit.ucsd.edu/fetchers/models/(.*).php$ http://tabit.ucsd.edu/fetchers/models/$1.php [P,L]
+RewriteRule ^proxy/http:/tabit.ucsd.edu/fetchers/geo_models/(.*).php$ http://tabit.ucsd.edu/fetchers/geo_models/$1.php [P,L]
+RewriteRule ^proxy/http:/tabit.ucsd.edu/fetchers/tmp_models/(.*).php$ http://tabit.ucsd.edu/fetchers/tmp_models/$1.php [P,L]
+RewriteRule ^proxy/http:/neomorph.salk.edu/ips_methylomes/hs/fetchers/methylation/(.*).php$ http://neomorph.salk.edu/ips_methylomes/hs/fetchers/methylation/$1.php [P,L]
+RewriteRule ^proxy/http:/neomorph.salk.edu/ips_methylomes/hs/fetchers/bisulfite/(.*).php$ http://neomorph.salk.edu/ips_methylomes/hs/fetchers/bisculfite/$1.php [P,L]
+RewriteRule ^proxy/http:/neomorph.salk.edu/ips_methylomes/hs/fetchers/histones/(.*).php$ http://neomorph.salk.edu/ips_methylomes/hs/fetchers/histones/$1.php [P,L]
+RewriteRule ^proxy/http:/neomorph.salk.edu/ips_methylomes/hs/fetchers/models/(.*).php$ http://neomorph.salk.edu/ips_methylomes/hs/fetchers/models/$1.php [P,L]
+RewriteRule ^proxy/http:/neomorph.salk.edu/ips_methylomes/hs/fetchers/ltr/(.*).php$ http://neomorph.salk.edu/ips_methylomes/hs/fetchers/ltr/$1.php [P,L]
+RewriteRule ^proxy/http:/neomorph.salk.edu/ips_methylomes/hs/fetchers/mrna/(.*).php$ http://neomorph.salk.edu/ips_methylomes/hs/fetchers/mrna/$1.php [P,L]
+RewriteRule ^proxy/http:/neomorph.salk.edu/ips_methylomes/hs/fetchers/smrna/(.*).php$ http://neomorph.salk.edu/ips_methylomes/hs/fetchers/smrna/$1.php [P,L]
+RewriteRule ^proxy/http:/neomorph.salk.edu/ips_methylomes/hs/fetchers/refs/(.*).php$ http://neomorph.salk.edu/ips_methylomes/hs/fetchers/refs/$1.php [P,L]
+RewriteRule ^proxy/http:/tabit.ucsd.edu:8080/(.*)$ http://tabit.ucsd.edu:8080/$1 [P,L]
+# RewriteRule ^a$ b [P,L]
+# RewriteRule ^a$ http://www.googleNASeqindex.html [P,L]
+
+
+# Do NOT use overly permissive rules like this, you're asking for trouble if you do.
+# RewriteRule ^index\.html/http:/(.*)$ http://$1 [P,ewriteRule ^proxy/http:
+
+RewriteRule ^proxy/http:/alya.ucsd.edu:8080/(.*)$ http://alya.ucsd.edu:8080/$1 [P,L]
+RewriteRule ^proxy/http:/urdomain/(.*)$ http://urdomain/$1 [P,L]
+
+RewriteRule ^proxy/http:/192.168.115.187:8080/(.*)$ http://192.168.115.187:8080/$1 [P,L]
+RewriteRule ^proxy/http:/hgdownload.cse.ucsc.edu/(.*)$ http://hgdownload.cse.ucsc.edu/$1 [P,L]
+RewriteRule ^proxy/http:/tabit.ucsd.edu/(.*)$ http://tabit.ucsd.edu/$1 [P,L]
+
+RewriteRule ^proxy/http:/neomorph.salk.edu/(.*)$ http://neomorph.salk.edu/$1 [P,L]
+RewriteRule ^proxy/http:/genboree.org/(.*)$ http://genboree.org/$1 [P,L]

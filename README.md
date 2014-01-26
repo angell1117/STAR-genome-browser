@@ -10,6 +10,14 @@ to view data tracks and get details from manual.
 If you want to process your own data and set up environment on your computer, you
 need to install some software packages before using STAR genome browser:
 
+If you want to setup a totally independent instance of our website.You should mainly follow these steps: 
+1. config your LAMP envirnoment for a Linux machine.
+2. create database using the dumped SQL under database-sql and generate your own data
+3. Localize source code files under "website" directory, you need to change some paths and URLs to your own one.
+4. configure reverse proxy
+(please note this may need advanced users or developers to work on)
+
+
 --------------------------------------------------------------------------------
 Required software packages:
 

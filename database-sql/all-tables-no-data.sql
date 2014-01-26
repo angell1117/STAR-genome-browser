@@ -28,6 +28,20 @@ CREATE TABLE `center` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `annoj`
+--
+
+DROP TABLE IF EXISTS `annoj`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `annoj` (
+  `track_type` char(20) DEFAULT NULL,
+  `aj_path` char(40) DEFAULT NULL,
+  `aj_height` smallint(5) unsigned NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `configuration`
 --
 
